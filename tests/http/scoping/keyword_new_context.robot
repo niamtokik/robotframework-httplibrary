@@ -1,6 +1,6 @@
 *** Settings ***
 
-Resource        ../variables.txt
+Resource        ../variables.robot
 Library         HttpLibrary.HTTP
 
 *** Keywords ***

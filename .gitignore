@@ -2,8 +2,14 @@
 bin/buildout
 bin/robotframework
 develop-eggs/
+build/
+eggs/
 log.html
 output.xml
 parts/
 report.html
 src/robotframework_httplibrary.egg-info/
+dist/
+**~
+**pyc
+venv/

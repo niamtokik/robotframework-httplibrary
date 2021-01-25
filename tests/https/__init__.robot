@@ -4,7 +4,7 @@ Library         HttpLibrary.HTTP
 Library         Process
 Library         OperatingSystem
 
-Resource        variables.txt
+Resource        variables.robot
 
 Suite Setup     Start Secure Mockserver
 Suite Teardown  Stop Secure Mockserver

@@ -1,12 +1,14 @@
 from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
 from builtins import object, str
 from robot.api import logger
-
 from base64 import b64encode
 from functools import wraps
 from urllib.parse import urlparse, parse_qs
+
+try:
+    from future import standard_library
+except:
+    pass
 
 import sys
 from . import livetest

@@ -1,25 +1,57 @@
-VERSION = 1.1.5
+######################################################################
+# GNU Makefile
+######################################################################
+VERSION = 1.1.6
+PYTHON_VERSION ?= 3.8
+TOX_ENV ?= py38
+VENV = ./venv
 
-.PHONY: tests
-tests:
-	tox
+######################################################################
+# full test
+######################################################################
+test: tox robot
 
-.PHONY: clean
+######################################################################
+# create the virtualenv
+######################################################################
+$(VENV):
+	virtualenv --python=python$(PYTHON_VERSION) $(VENV)
+	$(VENV)/bin/python setup.py install
+
+######################################################################
+# test with robot
+######################################################################
+$(VENV)/bin/robot:
+	$(VENV)/bin/pip install robotframework
+
+.PHONY += robot
+robot: $(VENV) $(VENV)/bin/robot
+	export PATH=$${PATH}:$(VENV)/bin; \
+	       	$(VENV)/bin/robot tests
+
+######################################################################
+# test with tox
+######################################################################
+$(VENV)/bin/tox:
+	$(VENV)/bin/pip install tox
+
+.PHONY += tox
+tox: $(VENV) $(VENV)/bin/tox
+	$(VENV)/bin/tox -e $(TOX_ENV)
+
+######################################################################
+# clean everything
+######################################################################
+.PHONY += clean
 clean:
 	git clean -dfx
 
-.PHONY: run-robotframework
-run-robotframework:
-	bin/robotframework tests
+.PHONY += pypi-test
+pypi-test:
+	python3 -m build
+	python3 -m twine upload --repository testpypi dist/*
 
-.PHONY: buildout-development-py2
-buildout-development-py2:
-	virtualenv --no-site-packages .venv27
-	.venv27/bin/python bootstrap.py
-	bin/buildout
-
-.PHONY: buildout-development-py3
-buildout-development-py3:
-	virtualenv --no-site-packages --python=python3 .venv36
-	.venv36/bin/python bootstrap.py
-	bin/buildout
+.PHONY += pypi
+pypi:
+	python3 -m build
+	python3 -m twine upload --repository pypi dist/*
